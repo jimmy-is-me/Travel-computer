@@ -1,0 +1,81 @@
+/* Responsive enhancement: keep the existing mobile layout as the baseline. */
+.calculator-layout > *, .calculator-actions, .calculator-summary { min-width: 0; }
+#recordsPage > .row { flex-wrap: wrap; }
+.record-top, .record-price { min-width: 0; }
+.record-actions { flex-wrap: wrap; }
+
+@media (min-width: 640px) {
+  main { max-width: 760px; padding-left: 28px; padding-right: 28px; }
+  header { margin-bottom: 26px; }
+  .card { padding: 24px; }
+  .keys button { min-height: 62px; }
+  #recordsPage .stats strong { font-size: 30px; }
+  #settingsPage:not([hidden]) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    align-items: start;
+  }
+  #settingsPage > h2 { grid-column: 1 / -1; margin: 0; }
+  #settingsPage > .card { margin: 0; }
+}
+
+@media (min-width: 960px) {
+  main {
+    max-width: 1180px;
+    padding: 30px 32px 50px;
+  }
+  header { min-height: 65px; padding-right: 400px; margin-bottom: 26px; }
+  header h1 { font-size: 27px; }
+  header small { font-size: 13px; }
+  nav {
+    top: 30px;
+    bottom: auto;
+    left: auto;
+    right: max(32px, calc((100vw - 1180px) / 2 + 32px));
+    transform: none;
+    width: 360px;
+    padding: 6px;
+    border: 1px solid var(--line);
+    border-radius: 19px;
+  }
+  nav button { min-height: 55px; }
+  .tabs { max-width: 440px; }
+  .rate { margin-bottom: 20px; font-size: 14px; min-height: 49px; }
+  .notice { margin: 0 0 18px; min-height: 60px; }
+  .calculator-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: 26px;
+    align-items: start;
+  }
+  .calculator-summary > .card { margin: 0; padding: 28px; }
+  .calculator-summary .amount { min-height: 116px; font-size: 54px; }
+  .calculator-summary .result { padding: 22px; margin: 22px 0; }
+  .calculator-summary .result strong { font-size: 43px; }
+  .calculator-summary #share { margin-top: 20px; font-size: 16px; }
+  .calculator-actions .keys { gap: 11px; }
+  .calculator-actions .keys button { min-height: 66px; font-size: 26px; }
+  .calculator-actions > .big { min-height: 58px; margin-top: 16px; }
+  .calculator-actions .note::after {
+    content: '電腦可直接按數字與運算鍵；Backspace 刪除，Esc 清空。';
+    display: block;
+    margin-top: 7px;
+  }
+  #recordsPage .stats { max-width: 760px; gap: 20px; }
+  #recordsPage .filters { max-width: 760px; }
+  #recordsPage #list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 18px;
+  }
+  #list > .card { margin: 0; }
+  #list > .empty { grid-column: 1 / -1; }
+  #recordsPage .selection { max-width: 760px; }
+  #settingsPage:not([hidden]) { gap: 22px; }
+  #settingsPage > .card { padding: 26px; }
+  dialog { width: min(calc(100% - 48px), 560px); }
+  .sheet { padding: 28px; }
+  #toast { bottom: 28px; }
+}
