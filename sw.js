@@ -1,7 +1,53 @@
 "use strict";
-const CACHE='travel-computer-shell-v2-3';
-const BASE=new URL('./',self.location.href);
-const FILES=['./','./index.html','./styles.css','./responsive.css','./app.js','./ui.js','./manifest.webmanifest','./icon.svg'].map(p=>new URL(p,BASE).href);
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES))));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('travel-computer-shell-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>{const r=e.request,u=new URL(r.url);if(r.method!=='GET'||u.origin!==BASE.origin)return;if(r.mode==='navigate'&&(u.pathname===BASE.pathname||u.pathname===new URL('index.html',BASE).pathname)){e.respondWith(caches.open(CACHE).then(c=>c.match(new URL('index.html',BASE).href)).then(hit=>hit||fetch(r)));return}if(FILES.includes(u.href))e.respondWith(caches.open(CACHE).then(c=>c.match(r)).then(hit=>hit||fetch(r)))});
+const BASE = new URL('./', self.location.href);
+const PREFIX = 'travel-computer-shell-' + BASE.pathname + ':';
+const CACHE = PREFIX + 'v2-4';
+const INDEX = new URL('index.html', BASE).href;
+const FILES = ['index.html', 'styles.css', 'responsive.css', 'app.js', 'ui.js', 'manifest.webmanifest', 'icon.svg'].map(file => new URL(file, BASE).href);
+
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES.map(url => new Request(url, {cache: 'reload', redirect: 'error'})))));
+});
+self.addEventListener('activate', event => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.allSettled(keys.filter(key => key.startsWith(PREFIX) && key !== CACHE).map(key => caches.delete(key)));
+    await self.clients.claim();
+  })());
+});
+
+async function cached(url) {
+  try {
+    const response = await (await caches.open(CACHE)).match(url);
+    return response && response.ok && !response.redirected ? response : null;
+  } catch {
+    return null;
+  }
+}
+
+async function networkFirst(request, fallback, navigation) {
+  try {
+    const response = await fetch(request, {cache: 'no-cache'});
+    if (response.status < 500) return response;
+    return await cached(fallback) || response;
+  } catch {
+    return await cached(fallback) || new Response(navigation ? '目前無法連線，且尚無可用的離線頁面。請恢復網路後重新整理。' : 'Resource unavailable offline.', {
+      status: 503,
+      headers: {'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store'}
+    });
+  }
+}
+
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  if (request.method !== 'GET') return;
+  const url = new URL(request.url);
+  if (url.origin !== BASE.origin) return;
+  if (request.mode === 'navigate') {
+    if (url.pathname === BASE.pathname || url.pathname === new URL(INDEX).pathname) {
+      event.respondWith(networkFirst(request, INDEX, true));
+    }
+    return;
+  }
+  if (FILES.includes(url.href)) event.respondWith(networkFirst(request, url.href, false));
+});
