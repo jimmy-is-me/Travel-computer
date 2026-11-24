@@ -1,9 +1,9 @@
 "use strict";
 const BASE = new URL('./', self.location.href);
 const PREFIX = 'travel-computer-shell-' + BASE.pathname + ':';
-const CACHE = PREFIX + 'v2-5';
+const CACHE = PREFIX + 'v3-1';
 const HOME = BASE.href;
-const ASSETS = ['styles.css', 'responsive.css', 'app.js', 'ui.js', 'manifest.webmanifest', 'icon.svg'].map(path => new URL(path, BASE).href);
+const ASSETS = ['styles.css', 'responsive.css', 'split.css', 'app.js?v=3', 'ui.js', 'split-model.js', 'split-ui.js', 'manifest.webmanifest', 'icon.svg'].map(path => new URL(path, BASE).href);
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll([HOME, ...ASSETS].map(url => new Request(url, {cache: 'reload', redirect: 'error'})))));
@@ -45,7 +45,7 @@ self.addEventListener('fetch', event => {
   const url = new URL(request.url);
   if (url.origin !== BASE.origin) return;
   if (request.mode === 'navigate') {
-    if (url.pathname === BASE.pathname) event.respondWith(serve(request, HOME, true));
+    if (url.pathname === BASE.pathname || url.pathname === new URL('index.html', BASE).pathname) event.respondWith(serve(request, HOME, true));
     return;
   }
   if (ASSETS.includes(url.href)) event.respondWith(serve(request, url.href, false));
