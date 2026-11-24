@@ -1,9 +1,9 @@
 "use strict";
 const BASE = new URL('./', self.location.href);
 const PREFIX = 'travel-computer-shell-' + BASE.pathname + ':';
-const CACHE = PREFIX + 'v3-1';
+const CACHE = PREFIX + 'v3-2';
 const HOME = BASE.href;
-const ASSETS = ['styles.css', 'responsive.css', 'split.css', 'app.js?v=3', 'ui.js', 'split-model.js', 'split-ui.js', 'manifest.webmanifest', 'icon.svg'].map(path => new URL(path, BASE).href);
+const ASSETS = ['styles.css?v=4', 'responsive.css?v=4', 'split.css?v=4', 'app.js?v=3', 'ui.js', 'split-model.js', 'split-ui.js', 'manifest.webmanifest', 'icon.svg'].map(path => new URL(path, BASE).href);
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll([HOME, ...ASSETS].map(url => new Request(url, {cache: 'reload', redirect: 'error'})))));

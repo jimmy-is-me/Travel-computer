@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#25654e"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg"><title>多人分帳計算機｜旅遊分帳、聚餐分帳、LINE 分享｜旅遊小帳</title>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111827"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg"><title>多人分帳計算機｜旅遊分帳、聚餐分帳、LINE 分享｜旅遊小帳</title>
 <meta name="description" content="免費多人分帳計算機。輸入成員、代墊人和金額，指定分攤對象，支援平均與自訂金額，自動算出誰要付給誰。適合旅遊分帳、聚餐 AA 制、團購，結算可複製到 LINE，免登入。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="WUMETAX LAB">
@@ -19,63 +19,82 @@
   "offers": { "@type": "Offer", "price": 0, "priceCurrency": "TWD" }
 }
 </script>
-<meta name="twitter:card" content="summary"><script>window.travelInitialTheme='light';try{const s=JSON.parse(localStorage.getItem('travel-pocket-v2')||localStorage.getItem('japan-pocket-calculator-v1')||'{}');if(['light','dark','system'].includes(s.theme))window.travelInitialTheme=s.theme}catch(e){}document.documentElement.dataset.theme=window.travelInitialTheme==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):window.travelInitialTheme;</script><link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./responsive.css"><link rel="stylesheet" href="./split.css"><script defer src="./split-model.js"></script><script defer src="./app.js?v=3"></script><script defer src="./ui.js"></script><script defer src="./split-ui.js"></script></head>
-<body><main><header class="site-header"><div class="site-brand"><a href="https://wumetax.com/lab/">WUMETAX LAB</a><span>旅遊小帳</span></div><button id="quickTheme" type="button">深色</button></header>
+<meta name="twitter:card" content="summary"><script>window.travelInitialTheme='light';try{const s=JSON.parse(localStorage.getItem('travel-pocket-v2')||localStorage.getItem('japan-pocket-calculator-v1')||'{}');if(['light','dark','system'].includes(s.theme))window.travelInitialTheme=s.theme}catch(e){}document.documentElement.dataset.theme=window.travelInitialTheme==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):window.travelInitialTheme;</script><link rel="stylesheet" href="./styles.css?v=4"><link rel="stylesheet" href="./responsive.css?v=4"><link rel="stylesheet" href="./split.css?v=4"><script defer src="./split-model.js"></script><script defer src="./app.js?v=3"></script><script defer src="./ui.js"></script><script defer src="./split-ui.js"></script></head>
+<body>
+<header class="site-header">
+  <div class="site-bar">
+    <a class="site-brand" href="https://wumetax.com/lab/" aria-label="WUMETAX LAB 工具總覽">
+      <span class="brand-mark" aria-hidden="true">W</span>
+      <span><strong class="brand-name">WUMETAX <span class="brand-lab">LAB</span></strong><span class="brand-tool">旅遊小帳</span></span>
+    </a>
+    <button id="quickTheme" type="button">深色</button>
+  </div>
+</header>
+<div class="site-menu"><nav aria-label="旅遊小帳功能"><button type="button" data-page="split" class="active" aria-current="page">分帳</button><button type="button" data-page="calc">換算</button><button type="button" data-page="records">紀錄</button><button type="button" data-page="settings">設定</button></nav></div>
+<main>
 <section id="splitPage" aria-labelledby="splitHeading">
   <div class="split-hero">
-    <h1 id="splitHeading">多人分帳計算機</h1>
-    <p>旅遊、聚餐或團購有人先代墊？把每筆費用分給實際參與的人，算出誰該付給誰，再把結果貼到 LINE 群組。</p>
+    <div>
+      <h1 id="splitHeading">多人分帳計算機</h1>
+      <p>記錄旅遊、聚餐或團購代墊，指定分攤成員，算出轉帳金額並分享至 LINE 群組。</p>
+    </div>
     <a href="#splitGuide">分帳教學與範例</a>
   </div>
   <div class="split-layout">
     <div class="split-inputs">
       <section class="card split-card" aria-labelledby="membersHeading">
-        <h2 id="membersHeading">分帳成員</h2>
-        <form id="splitMemberForm">
-          <label for="splitMemberName">成員姓名</label>
-          <div class="split-inline">
-            <input id="splitMemberName" maxlength="40" placeholder="例如 小安" autocomplete="off" required>
-            <button type="submit" class="primary" id="splitAddMember">加入成員</button>
-          </div>
-        </form>
-        <ul id="splitMembers" class="split-list"></ul>
+        <div class="panel-heading"><h2 id="membersHeading">分帳成員</h2></div>
+        <div class="panel-body">
+          <form id="splitMemberForm">
+            <label for="splitMemberName">成員姓名</label>
+            <div class="split-inline">
+              <input id="splitMemberName" maxlength="40" placeholder="例如 小安" autocomplete="off" required>
+              <button type="submit" class="primary" id="splitAddMember">加入成員</button>
+            </div>
+          </form>
+          <ul id="splitMembers" class="split-list"></ul>
+        </div>
       </section>
       <section class="card split-card" aria-labelledby="expenseHeading">
-        <div class="split-heading">
+        <div class="panel-heading">
           <h2 id="expenseHeading">代墊支出</h2>
           <button type="button" class="primary" id="splitAddExpense">新增支出</button>
         </div>
-        <div id="splitRecordPending" class="split-pending" hidden>
-          <p>已從消費紀錄帶入金額。加入成員後就能指定付款人與分攤對象。</p>
-          <button type="button" id="splitCancelRecord">取消帶入</button>
+        <div class="panel-body">
+          <div id="splitRecordPending" class="split-pending" hidden>
+            <p>已從消費紀錄帶入金額。加入成員後就能指定付款人與分攤對象。</p>
+            <button type="button" id="splitCancelRecord">取消帶入</button>
+          </div>
+          <p class="split-muted">以新台幣結算。外幣支出可從「紀錄」帶入當時的換算金額。</p>
+          <div id="splitExpenses"></div>
         </div>
-        <p class="split-muted">以新台幣結算。外幣支出可從「紀錄」帶入當時的換算金額。</p>
-        <div id="splitExpenses"></div>
       </section>
     </div>
     <section class="card split-card split-summary" aria-labelledby="resultsHeading">
-      <h2 id="resultsHeading">分帳結果</h2>
-      <label for="splitProjectName">分帳名稱（選填）</label>
-      <input id="splitProjectName" maxlength="60" placeholder="例如 大阪自由行" autocomplete="off">
-      <div class="split-total">
-        <span>支出合計</span>
-        <strong id="splitTotal">NT$ 0</strong>
-        <small id="splitCounts">0 人 · 0 筆支出</small>
-      </div>
-      <h3>誰要付給誰</h3>
-      <div id="splitTransfers" aria-live="polite"></div>
-      <details id="splitBalances" hidden>
-        <summary>每人代墊、應付與結餘</summary>
-        <div class="split-table-scroll">
-          <table class="split-table">
-            <thead><tr><th scope="col">成員</th><th scope="col">代墊</th><th scope="col">應付</th><th scope="col">結餘</th></tr></thead>
-            <tbody id="splitBalanceRows"></tbody>
-          </table>
+      <div class="panel-heading"><h2 id="resultsHeading">分帳結果</h2></div>
+      <div class="panel-body">
+        <label for="splitProjectName">分帳名稱（選填）</label>
+        <input id="splitProjectName" maxlength="60" placeholder="例如 大阪自由行" autocomplete="off">
+        <div class="split-total">
+          <span>支出合計</span>
+          <strong id="splitTotal">NT$ 0</strong>
+          <small id="splitCounts">0 人 · 0 筆支出</small>
         </div>
-      </details>
-      <button type="button" class="primary full" id="splitOpenShare" disabled>產生 LINE 分帳文字</button>
-      <p class="split-muted">分帳記錄存在目前瀏覽器，可到「設定」下載完整 JSON 備份。</p>
-      <p id="splitStorageStatus" role="status" hidden></p>
+        <h3>誰要付給誰</h3>
+        <div id="splitTransfers" aria-live="polite"></div>
+        <details id="splitBalances" hidden>
+          <summary>每人代墊、應付與結餘</summary>
+          <div class="split-table-scroll">
+            <table class="split-table">
+              <thead><tr><th scope="col">成員</th><th scope="col">代墊</th><th scope="col">應付</th><th scope="col">結餘</th></tr></thead>
+              <tbody id="splitBalanceRows"></tbody>
+            </table>
+          </div>
+        </details>
+        <button type="button" class="primary full" id="splitOpenShare" disabled>產生 LINE 分帳文字</button>
+        <p class="split-muted">分帳記錄存在目前瀏覽器，可到「設定」下載完整 JSON 備份。</p>
+        <p id="splitStorageStatus" role="status" hidden></p>
+      </div>
     </section>
   </div>
   <section id="splitGuide" class="split-guide" aria-labelledby="guideHeading">
@@ -118,7 +137,6 @@
 <section id="calcPage" hidden><h2>旅遊匯率換算</h2><div class="tabs"><button data-base="JPY" class="active">日本 · JPY</button><button data-base="KRW">韓國 · KRW</button></div><button id="rateLink" class="rate full"></button><div id="editing" class="notice" hidden>正在編輯，保留原始匯率 <button id="cancelEdit">取消</button></div><div class="card"><div class="row"><b id="inputLabel"></b><button id="swap">切換 ⇄</button></div><button id="amount" class="amount" aria-label="直接輸入金額或算式">0</button><small id="hint"></small><div class="result"><small id="outputLabel"></small><strong id="output"></strong></div><div class="row"><span>平分人數</span><div class="step"><button id="minus" aria-label="減少人數">−</button><input id="people" aria-label="平分人數" type="number" min="1" max="10000" inputmode="numeric" value="1"><button id="plus" aria-label="增加人數">+</button></div></div><div id="share"></div></div><div id="keys" class="keys"><button data-k="C">AC</button><button data-k="(">(</button><button data-k=")">)</button><button data-k="/" class="op">÷</button><button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button data-k="*" class="op">×</button><button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button data-k="-" class="op">−</button><button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button data-k="+" class="op">+</button><button data-k="0">0</button><button data-k=".">.</button><button data-k="back" aria-label="刪除最後一字">⌫</button><button data-k="=" class="primary">=</button></div><button id="openSave" class="primary full big">記一筆</button><p class="note center">平分只做試算，儲存才會計入帳本。</p></section>
 <section id="recordsPage" hidden><h2>消費紀錄</h2><p class="note">混合幣別依各筆歷史匯率換算台幣，不直接混加原幣。</p><div class="stats"><div class="card"><small>今天花費</small><strong id="todayTotal"></strong></div><div class="card"><small>全部花費</small><strong id="allTotal"></strong><small id="count"></small></div></div><div class="filters"><input id="search" type="search" placeholder="搜尋項目、分類" aria-label="搜尋紀錄"><select id="currencyFilter" aria-label="幣別篩選"><option value="all">全部幣別</option><option value="JPY">日圓</option><option value="KRW">韓元</option></select></div><div class="row"><label class="check"><input type="checkbox" id="selectAll">全選結果</label><button id="todayOnly" aria-pressed="false">只看今天</button><button id="unselect">取消勾選</button></div><div class="card selection" id="selection" hidden><strong id="selectedTotal"></strong><small>包含篩選範圍外的勾選項目</small><label for="selectedPeople">合計再平分人數</label><input id="selectedPeople" type="number" min="1" max="10000" value="2" inputmode="numeric"><p id="selectedShare"></p><small>僅試算，不新增帳目。</small></div><div id="list"></div></section>
 <section id="settingsPage" hidden><h2>設定與備份</h2><div class="card"><h3>外觀</h3><select id="theme" aria-label="顯示模式"><option value="system">跟隨系統</option><option value="light">淺色模式</option><option value="dark">深色模式</option></select></div><div class="card"><h3>匯率</h3><select id="rateBase" aria-label="設定外幣"><option value="JPY">日圓 JPY</option><option value="KRW">韓元 KRW</option></select><p id="rateDetail" class="note"></p><button id="refresh" class="primary full">更新並使用參考匯率</button><p id="rateStatus" class="note" role="status"></p><form id="manualForm"><label id="manualLabel" for="manualRate"></label><input id="manualRate" type="number" step="any" min="0" inputmode="decimal" required><button class="full">套用手動匯率</button></form><p class="note">參考匯率不是銀行或信用卡成交價。手動匯率不會在啟動時被覆蓋，每筆紀錄保留原匯率。</p></div><div class="card"><h3>PWA 安裝與離線</h3><button id="install" class="primary full" hidden>安裝到裝置</button><p class="note">iPhone：Safari 分享選單 → 加入主畫面。其他支援瀏覽器可使用選單中的安裝功能，實際選項依瀏覽器而異。</p><p id="pwaStatus" class="note" role="status"></p><p class="note">首次連線完成快取後可離線換算、記帳。更新匯率仍需網路。</p></div><div class="card"><h3>備份與還原</h3><div class="stack"><button id="backup">下載 JSON 完整備份</button><button id="csv">匯出 CSV 表格</button><button id="restore">從 JSON 還原</button></div><input id="file" type="file" accept=".json,application/json" hidden><p class="note">備份包含分帳成員、支出、匯率記帳及偏好設定。匯入會取代目前資料，支援舊版旅遊小帳與日圓帳本。</p><p id="storageStatus" class="note" role="status"></p></div><div class="card"><h3>全部資料清除</h3><p class="note">先備份、確認檔案，再清除分帳成員、帳目、匯率及外觀設定。保留離線程式，不刪除同網域其他資料。</p><button id="prepareClear" class="danger full">備份後清除全部資料</button></div></section></main>
-<nav aria-label="旅遊小帳功能"><button type="button" data-page="split" class="active" aria-current="page">分帳</button><button type="button" data-page="calc">換算</button><button type="button" data-page="records">紀錄</button><button type="button" data-page="settings">設定</button></nav>
 <dialog id="splitExpenseDialog" aria-labelledby="splitExpenseTitle">
   <form id="splitExpenseForm" class="sheet">
     <div class="row"><h2 id="splitExpenseTitle">新增支出</h2><button type="button" data-close="splitExpenseDialog" aria-label="關閉">×</button></div>
@@ -149,7 +167,7 @@
     <textarea id="splitShareText" aria-labelledby="splitShareTitle" rows="8" readonly></textarea>
     <div class="split-share-actions">
       <button type="button" class="primary" id="splitCopy">複製文字</button>
-      <a id="splitLine" target="_blank" rel="noopener noreferrer">開啟 LINE 分享</a>
+      <a id="splitLine" class="action-link" target="_blank" rel="noopener noreferrer">開啟 LINE 分享</a>
     </div>
     <p id="splitCopyStatus" class="split-muted" role="status"></p>
   </div>
