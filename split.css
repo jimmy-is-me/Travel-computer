@@ -2,17 +2,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px 20px;
+  gap: 5px 16px;
+  border-radius: var(--radius);
   background: var(--strip);
   color: #fff;
-  padding: 12px var(--bar-gutter);
+  padding: 8px var(--card-padding);
 }
-.split-hero h1 { font-size: clamp(1.25rem, 3vw, 1.55rem); font-weight: 800; }
+.split-hero h1 { font-size: clamp(1.15rem, 3vw, 1.4rem); font-weight: 800; }
 .split-hero p { margin-top: 3px; font-size: .875rem; }
 .split-hero a {
   display: inline-flex;
   flex: none;
-  min-height: var(--control-height);
+  min-height: 36px;
   align-items: center;
   border: 1px solid #ffffff80;
   border-radius: var(--radius);
@@ -29,31 +30,17 @@
   display: grid;
   align-items: start;
   gap: 10px;
-  margin: 12px var(--gutter) 0;
+  margin-top: 10px;
 }
 .split-inputs { display: grid; min-width: 0; gap: 10px; }
 .split-card { margin: 0; padding: 0; }
-.panel-heading {
-  display: flex;
-  min-height: 54px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  border-bottom: 1px solid var(--line);
-  border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
-  background: var(--surface);
-  padding: 7px var(--card-padding);
-}
-.panel-heading h2, .split-card h3 { margin: 0; font-size: 1rem; font-weight: 800; }
-.panel-heading button { flex: none; }
-.panel-body { padding: var(--card-padding); }
+.split-card h3 { margin: 0; font-size: 1rem; font-weight: 800; }
 .panel-body > label:first-child, #splitMemberForm > label:first-child { margin-top: 0; }
 
 .split-inline { display: flex; align-items: stretch; gap: 7px; }
 .split-inline > button { flex: none; }
 .split-muted { margin: 7px 0; color: var(--muted); font-size: .875rem; }
 .split-muted:first-child { margin-top: 0; }
-.panel-body > :last-child { margin-bottom: 0; }
 .split-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 10px; }
 .split-heading strong, .split-transfer strong {
   flex-shrink: 0;
@@ -62,10 +49,29 @@
 }
 .split-list { padding: 0; margin: 0; list-style: none; }
 .split-list:empty { display: none; }
-#splitMembers { margin-top: 8px; }
-.split-member, .split-transfer { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 7px 0; }
-.split-member, .split-expense { border-bottom: 1px solid var(--line); }
-.split-member:last-child, .split-expense:last-child { border-bottom: 0; padding-bottom: 0; }
+#splitMembers:not(:empty) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 155px), 1fr));
+  gap: 5px;
+  max-height: 9.75rem;
+  margin: 7px -3px -3px;
+  padding: 3px;
+  overflow: auto;
+}
+.split-member, .split-transfer { display: flex; justify-content: space-between; align-items: center; gap: 7px; }
+.split-member {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 3px 4px 3px 7px;
+}
+.split-member strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.split-member .split-actions { gap: 4px; }
+.split-member .split-actions button { min-height: 34px; padding: 4px 5px; }
+.split-transfer { padding: 7px 0; }
+.split-expense { border-bottom: 1px solid var(--line); }
+.split-expense:last-child { border-bottom: 0; padding-bottom: 0; }
 .split-actions { display: flex; flex: none; justify-content: flex-end; gap: 6px; }
 .split-actions button { padding-inline: 9px; }
 .split-expense { padding: 9px 0; }
@@ -131,8 +137,8 @@
 #splitShareText { display: block; min-height: 8rem; background: var(--surface); }
 
 .split-guide {
-  margin: 14px var(--gutter) 0;
-  scroll-margin-top: 75px;
+  margin: 12px 0 0;
+  scroll-margin-top: 80px;
 }
 .split-guide > h2 { margin-bottom: 10px; }
 .split-guide h3 { margin: 0 0 5px; }
@@ -152,7 +158,8 @@
 }
 @media (max-width: 650px) {
   .split-hero { align-items: flex-start; flex-direction: column; }
-  .split-hero a { min-height: 40px; }
+  .split-guide { scroll-margin-top: 12px; }
+  .split-member .split-actions button { min-height: 42px; }
 }
 @media (max-width: 380px) {
   .split-amount-grid { grid-template-columns: 1fr; gap: 0; }

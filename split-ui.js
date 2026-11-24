@@ -49,7 +49,7 @@
     $("splitAddMember").textContent = "儲存姓名";
     cancelMember.hidden = false;
     $("splitMemberName").select();
-    $("splitMemberName").focus();
+    $("splitMemberName").focus({ preventScroll: true });
   }
 
   function deleteMember(member) {
@@ -61,7 +61,7 @@
     if (!confirm(`移除成員「${member.name}」？`)) return;
     if (memberEdit === member.id) resetMemberForm();
     replaceProject({ ...project(), members: project().members.filter(row => row.id !== member.id) }, "已移除成員");
-    $("splitMemberName").focus();
+    $("splitMemberName").focus({ preventScroll: true });
   }
 
   function renderMembers() {
@@ -75,7 +75,9 @@
       const row = el("li", "split-member");
       const actions = el("div", "split-actions");
       actions.append(editButton, removeButton);
-      row.append(el("strong", "", member.name), actions);
+      const name = el("strong", "", member.name);
+      name.title = member.name;
+      row.append(name, actions);
       list.append(row);
     }
     $("splitAddExpense").disabled = !project().members.length || project().expenses.length >= model.maxExpenses;
@@ -103,7 +105,7 @@
       const removeButton = button("刪除", () => {
         if (!confirm(`刪除分帳支出「${expense.title}」？`)) return;
         replaceProject({ ...project(), expenses: project().expenses.filter(row => row.id !== expense.id) }, "已刪除支出");
-        $("splitAddExpense").focus();
+        $("splitAddExpense").focus({ preventScroll: true });
       }, "danger");
       editButton.setAttribute("aria-label", `編輯 ${expense.title}`);
       removeButton.setAttribute("aria-label", `刪除 ${expense.title}`);
@@ -188,7 +190,7 @@
   function openExpense(expense = null) {
     const members = project().members;
     if (!members.length) {
-      $("splitMemberName").focus();
+      $("splitMemberName").focus({ preventScroll: true });
       return;
     }
     if (!expense && project().expenses.length >= model.maxExpenses) {
@@ -232,7 +234,7 @@
     $("splitExpenseName").focus();
   }
 
-  const cancelMember = button("取消改名", () => { resetMemberForm(); $("splitMemberName").focus(); });
+  const cancelMember = button("取消改名", () => { resetMemberForm(); $("splitMemberName").focus({ preventScroll: true }); });
   cancelMember.hidden = true;
   $("splitMemberForm").append(cancelMember);
 
@@ -250,7 +252,7 @@
       [...members, { id: createId(), name }];
     replaceProject({ ...project(), members: next }, memberEdit ? "已更新姓名" : "已加入成員");
     resetMemberForm();
-    $("splitMemberName").focus();
+    $("splitMemberName").focus({ preventScroll: true });
   };
 
   $("splitProjectName").oninput = event => {
@@ -296,7 +298,7 @@
       replaceProject({ ...project(), expenses }, expenseEdit ? "已更新支出" : "已新增支出");
       if (!expenseEdit && pendingRecord) { pendingRecord = null; renderMembers(); }
       $("splitExpenseDialog").close();
-      $("splitAddExpense").focus();
+      $("splitAddExpense").focus({ preventScroll: true });
     } catch (error) {
       expenseError(error.message);
     }
@@ -314,7 +316,7 @@
     pendingRecord = existing ? null : { title: model.cleanText(record.title) || "未命名消費", amount, recordId: record.id };
     show("split");
     if (project().members.length) openExpense(existing);
-    else $("splitMemberName").focus();
+    else $("splitMemberName").focus({ preventScroll: true });
   });
 
   $("splitOpenShare").onclick = () => {
